@@ -15,14 +15,14 @@ args = parser.parse_args()
 # proceed after elasticsearch passes healthcheck
 pwd = None
 if args.secure:
-    with open(os.path.join(os.getenv('HOME'), '.es_pwd'), 'r') as f:
+    with open(os.path.join(os.getenv('HOME'), 'huntingtest', '.es_pwd'), 'r') as f:
         for line in f:
             if line:
                 pwd = line.strip() 
     if not pwd:
         print('Failed to setup password, exiting')
         sys.exit(-1)
-    with open(os.path.join(os.getenv('HOME'), '.es_pwd'), 'w') as f:
+    with open(os.path.join(os.getenv('HOME'), 'huntingtest', '.es_pwd'), 'w') as f:
         f.write(pwd)
 elastic_ready = False
 localhost_url = 'https://localhost:9234'

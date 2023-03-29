@@ -20,6 +20,7 @@ jobs:
           echo "Running on a ${{ runner.os }} server hosted by GitHub"
           echo "Running in ${{ github.repository }} repository, ${{ github.ref }} branch."
           echo "HOME = ${HOME}"
+          mkdir -p ${HOME}/huntingtest
       - name: Code Checkout
         uses: actions/checkout@v3
       - name: Kestrel Code Checkout
@@ -35,31 +36,31 @@ jobs:
           path: './stix-shifter'
       - name: Create Virtual Environment
         run: |
-          ./create-venv.sh
+          ./scripts/create-venv.sh
           . huntingtest/bin/activate
           echo "venv_activate=$VIRTUAL_ENV/bin/activate" >> $GITHUB_ENV
       - name: Install kestrel and STIX-Shifter from Source Code
         run: |
           source ${{ env.venv_activate }}
           cd ${{ github.workspace }} 
-          ./install-stix-shifter-kestrel.sh
+          ./scripts/install-stix-shifter-kestrel.sh
       - name: Elasticsearch instance setup
         run: |
           source ${{ env.venv_activate }}
           cd ${{ github.workspace }} 
-          ./install-elastic.sh
+          ./scripts/install-elastic.sh
       - name: Import test data in elastic instance
-        run: ./import-data.sh
+        run: ./scripts/import-data.sh
       - name: Check deployment of the test environment
         run: |
           source ${{ env.venv_activate }}
           cd ${{ github.workspace }} 
-          ./run_kestrel.sh
+          ./scripts/run_kestrel.sh
       - name: Run Integration Tests
         run: |
           source ${{ env.venv_activate }}
           cd ${{ github.workspace }} 
-          ./run-bdd-tests.sh
+          ./scripts/run-bdd-tests.sh
       - name: Cleanup
         run: |
           docker stop es01test
