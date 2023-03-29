@@ -1,0 +1,15 @@
+profiles:
+    bh22:
+        connector: elastic_ecs
+        connection:
+            host: localhost
+            port: 9234
+            selfSignedCert: false
+            indices: win-111-winlogbeat-bh22-20220727
+            options:
+                dialects:
+                  - beats
+        config:
+            auth:
+                username: elastic
+                password: <ES_PWD>

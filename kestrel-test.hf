@@ -1,0 +1,8 @@
+# TTP: Find user processes (T1057)
+t1057_instances = GET process
+                  FROM stixshifter://bh22
+                  WHERE name = 'powershell.exe'
+		  START 2022-07-01T00:00:00Z STOP 2022-08-01T00:00:00Z
+t1057x = t1057_instances WHERE command_line LIKE '%getowner%get-process%'
+
+DISP t1057x
