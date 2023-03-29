@@ -33,7 +33,7 @@ This step will:
   * Build stix-shifter and kestrel from the code.
   * Create a docker network named `elastic`.
   * Create a docker instance of elasticsearch, named `es01test`.
-    * Store the password for `elastic` user on `es01test` in the file `${HOME}/es_pwd`.
+    * Store the password for `elastic` user on `es01test` in the file `${HOME}/huntingtest/.es_pwd`.
   * Import three elastic indexes in the newly created elasticsearch instance.
 
 TODO: 

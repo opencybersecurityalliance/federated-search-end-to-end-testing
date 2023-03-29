@@ -1,5 +1,6 @@
 from behave import given, when, then
 from kestrel.session import Session
+import os
 import shlex
 import subprocess
 
@@ -18,7 +19,7 @@ def step_impl(context):
 
 @given(u'a huntbook named "kestrel-test.hf"')
 def step_impl(context):
-    context.huntbook_name = 'kestrel-test.hf'
+    context.huntbook_name = os.path.join('huntbooks', 'kestrel-test.hf')
 
 @when(u'I read with Kestrel the huntbook "kestrel-test.hf"')
 def step_impl(context):

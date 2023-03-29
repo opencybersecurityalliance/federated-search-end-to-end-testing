@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ES_PWD=$(cat "${HOME}"/.es_pwd)
+ES_PWD=$(cat "${HOME}"/huntingtest/.es_pwd)
 mkdir -p data
 cd data || exit
 dataindexes=( "linux-91-sysflow-test-20220725" "win-111-winlogbeat-bh22-20220727" "win-111-winlogbeat-test-20220726" )
