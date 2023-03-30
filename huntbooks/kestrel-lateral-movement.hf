@@ -1,0 +1,9 @@
+# TTP: Copy 54ndc47 (WinRM and SCP) (T1570)
+# TTP: Start Agent (WinRM) (T1021.006)
+
+lateral_movement = GET process
+                   FROM stixshifter://bh22-win02
+                   WHERE command_line LIKE '%New-PSSession%'
+                   START 2022-07-01T00:00:00Z STOP 2022-08-01T00:00:00Z
+                  
+DISP lateral_movement ATTR pid, name, command_line

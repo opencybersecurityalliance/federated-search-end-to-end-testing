@@ -4,6 +4,12 @@ import os
 import shlex
 import subprocess
 
+def run_huntbook(context, huntbook_name):
+    huntflow_file =  os.path.join('huntbooks', huntbook_name)
+    with open(huntflow_file, 'r') as hff:
+        huntflow = hff.read()
+    context.session.execute(huntflow)
+
 @given(u'a Kestrel session')
 def step_impl(context):
     context.session = Session()
@@ -69,3 +75,57 @@ def step_impl(context):
 def step_impl(context):
     cmds = context.session.get_variable('newvar')
     assert cmds
+    
+@given(u'a winlogbeats elastic index')
+def step_impl(context):
+    context.winlogbeats_index_name = 'win-111-winlogbeat-bh22-20220727'
+
+
+@given(u'a linux sysflow elastic index')
+def step_impl(context):
+    context.linux_index_name = 'linux-91-sysflow-test-20220725'
+
+
+@when(u'I start hunt from TTPs with Kestrel')
+def step_impl(context):
+    run_huntbook(context, 'kestrel-user-processes.hf')
+    run_huntbook(context, 'kestrel-local-users.hf')
+    run_huntbook(context, 'kestrel-antivirus.hf')
+    run_huntbook(context, 'kestrel-lateral-movement.hf')
+    run_huntbook(context, 'kestrel-attack-candidates.hf')
+    
+
+@then(u'I should find user processes (T1057)')
+def step_impl(context):
+    t1057_instances = context.session.get_variable('t1057_instances')
+    assert t1057_instances and len(t1057_instances) == 1
+
+@then(u'identify local users (T1087.001)')
+def step_impl(context):
+    t1087_instances = context.session.get_variable('t1087_instances')
+    assert t1087_instances and len(t1087_instances) == 1
+
+
+@then(u'discover antivirus programs (T1518.001)')
+def step_impl(context):
+    t1518_instances = context.session.get_variable('t1518_instances')
+    assert t1518_instances and len(t1518_instances) == 2
+
+
+@then(u'match multiple related/similar TTPs (T1570 and T1021.006)')
+def step_impl(context):
+    lateral_movement = context.session.get_variable('lateral_movement')
+    assert not lateral_movement
+    # assert lateral_movement and len(lateral_movement) == 0
+
+
+@then(u'identify phishing candidates on windows')
+def step_impl(context):
+    phishing_candidates = context.session.get_variable('phishing_candidates')
+    assert phishing_candidates and len(phishing_candidates) == 2
+
+
+@then(u'identify exploit candidates on linux')
+def step_impl(context):
+    exploit_candidates = context.session.get_variable('exploit_candidates')
+    assert exploit_candidates and len(exploit_candidates) == 13
