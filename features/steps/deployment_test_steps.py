@@ -38,8 +38,9 @@ def step_impl(context):
     
 @given(u'a hunt statement')
 def step_impl(context):
-    # context.hunt_statement = "procs = GET process FROM stixshifter://bh22 WHERE name = 'powershell.exe'"
-    context.hunt_statement = "procs = GET process FROM stixshifter://bh22 WHERE name = 'powershell.exe' START 2022-07-01T00:00:00Z STOP 2022-08-01T00:00:00Z"
+    context.hunt_statement = "procs = GET process FROM stixshifter://bh22-win01 "\
+        "WHERE name = 'powershell.exe' "\
+        "START 2022-07-01T00:00:00Z STOP 2022-08-01T00:00:00Z"
 
 @when(u'I execute the statement with Kestrel')
 def step_impl(context):
@@ -54,7 +55,9 @@ def step_impl(context):
 
 @given(u'a hunt flow')
 def step_impl(context):
-    context.hunt_flow =  "newvar = GET process FROM stixshifter://bh22 WHERE [process:name = 'cmd.exe'] START 2022-07-01T00:00:00Z STOP 2022-08-01T00:00:00Z"
+    context.hunt_flow =  "newvar = GET process FROM stixshifter://bh22-win01 "\
+        "WHERE [process:name = 'cmd.exe'] "\
+        "START 2022-07-01T00:00:00Z STOP 2022-08-01T00:00:00Z"
 
 
 @when(u'I execute the hunt flow with Kestrel')
@@ -62,7 +65,7 @@ def step_impl(context):
     context.session.execute(context.hunt_flow)
 
 
-@then(u'I should export the Kestrem variable to python')
+@then(u'I should export the Kestrel variable to python')
 def step_impl(context):
     cmds = context.session.get_variable('newvar')
     assert cmds
