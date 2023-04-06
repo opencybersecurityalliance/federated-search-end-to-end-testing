@@ -1,7 +1,7 @@
 # TTP: Identify local users (T1087.001)
 # CALDERA command on Windows: `Get-WmiObject -Class Win32_UserAccount`
 t1087_instances = GET process
-                  FROM stixshifter://bh22-win01
+                  FROM stixshifter://bh22-win-111
                   WHERE command_line LIKE '%Win32_UserAccount%'
                   START 2022-07-01T00:00:00Z STOP 2022-08-01T00:00:00Z
 
