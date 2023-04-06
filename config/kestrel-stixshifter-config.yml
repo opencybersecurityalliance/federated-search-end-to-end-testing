@@ -33,7 +33,7 @@ profiles:
             host: localhost
             port: 9234
             selfSignedCert: false
-            indices: linux-91-sysflow--bh22-20220727
+            indices: linux-91-sysflow-bh22-20220727
             options:
                 dialects:
                   - beats
