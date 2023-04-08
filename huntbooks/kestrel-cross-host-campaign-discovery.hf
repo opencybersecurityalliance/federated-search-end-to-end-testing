@@ -1,7 +1,7 @@
 # TTP: a process spawns a process invoking another binary/image
 # example 1 on Windows: reading email results in executing something
 phishing_candidates = GET process
-                      FROM stixshifter://bh22-win01
+                      FROM stixshifter://bh22-win-111
                       WHERE parent_ref.name = 'WinMail.exe' AND binary_ref.name != 'WinMail.exe'
                       START 2022-07-01T00:00:00Z STOP 2022-08-01T00:00:00Z
 
@@ -18,7 +18,7 @@ lateral_mov_win = splunkd_activities WHERE pid = 7028
 
 lateral_mov_win_nt = FIND network-traffic CREATED BY lateral_mov_win
 
-lateral_mov_112_nt = GET network-traffic FROM stixshifter://bh22-win01
+lateral_mov_112_nt = GET network-traffic FROM stixshifter://bh22-win-112
                      WHERE src_port = lateral_mov_win_nt.src_port
 
 # DISP lateral_mov_112_nt ATTR src_ref.value, src_port, dst_ref.value, dst_port
@@ -26,7 +26,7 @@ lateral_mov_112_nt = GET network-traffic FROM stixshifter://bh22-win01
 lateral_mov_112_receiver = FIND process CREATED lateral_mov_112_nt
 
 splunkd_on_112 = GET process
-                 FROM stixshifter://bh22-win01
+                 FROM stixshifter://bh22-win-111
                  WHERE name = 'splunkd.exe'
                  START 2022-07-01T00:00:00Z STOP 2022-08-01T00:00:00Z
                  
@@ -36,16 +36,17 @@ lateral_mov_linux = splunkd_activities WHERE pid = 7880
 
 lateral_mov_linux_nt = FIND network-traffic CREATED BY lateral_mov_linux
 
-# DISP lateral_mov_linux_nt ATTR src_ref.value, src_port, dst_ref.value, dst_port
-
-lateral_mov_91_nt = GET network-traffic
-                    FROM stixshifter://bh22-win01
-                    WHERE dst_port = lateral_mov_linux_nt.dst_port
 DISP lateral_mov_linux_nt ATTR src_ref.value, src_port, dst_ref.value, dst_port
 
-# linux_proc = FIND process CREATED lateral_mov_91_nt
-# DISP linux_proc ATTR pid, name, command_line
-# node_children = FIND process CREATED BY linux_proc
-#                 START 2022-07-01T00:00:00Z STOP 2022-08-01T00:00:00Z
-# node_grand_children = FIND process CREATED BY node_children
-# c2_traffic = FIND network-traffic CREATED BY node_grand_children
+lateral_mov_91_nt = GET network-traffic
+                    FROM stixshifter://bh22-linux
+                    WHERE dst_port = lateral_mov_linux_nt.dst_port
+# DISP lateral_mov_linux_nt ATTR src_ref.value, src_port, dst_ref.value, dst_port
+
+linux_proc = FIND process CREATED lateral_mov_91_nt
+DISP linux_proc ATTR pid, name, command_line
+
+node_children = FIND process CREATED BY linux_proc
+                START 2022-07-01T00:00:00Z STOP 2022-08-01T00:00:00Z
+node_grand_children = FIND process CREATED BY node_children
+c2_traffic = FIND network-traffic CREATED BY node_grand_children
