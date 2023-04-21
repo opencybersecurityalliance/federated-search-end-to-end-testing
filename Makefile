@@ -10,7 +10,7 @@ check-venv:
 install-code:
 	./scripts/install-stix-shifter-kestrel-local.sh
 import-data:
-	./scripts/import-data-local.sh
+	./scripts/import-data.sh --gh-org cmadam
 install-all: check-venv checkout install-code install-elastic import-data
 check-deployment: check-venv
 	./scripts/run_kestrel.sh
