@@ -19,12 +19,7 @@ def step_impl(context):
 
 @when(u'I start hunt from TTPs with Kestrel')
 def step_impl(context):
-    run_huntbook(context, 'kestrel-user-processes.hf')
-    run_huntbook(context, 'kestrel-local-users.hf')
-    run_huntbook(context, 'kestrel-antivirus.hf')
-    run_huntbook(context, 'kestrel-lateral-movement.hf')
-    run_huntbook(context, 'kestrel-attack-candidates.hf')
-    
+    run_huntbook(context, 'kestrel-start-hunt-from-ttps.hf')
 
 @then(u'I should find user processes (T1057)')
 def step_impl(context):
