@@ -29,4 +29,7 @@ Scenario: Cross-Host Campaign Discovery
     Then I should find successful attacks led by phishing activities
     And reveal malicious activities on compromised host
     And identify hosts targetted in lateral movement by the attacker
+    And identify attacker activities on windows hosts
+    And identify attacker activities on linux hosts
+    And discover the C2 host / IP address if any
     And close the session

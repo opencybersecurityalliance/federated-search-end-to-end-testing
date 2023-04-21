@@ -40,14 +40,16 @@ def step_impl(context):
 @then(u'discover antivirus programs (T1518.001)')
 def step_impl(context):
     t1518_instances = context.session.get_variable('t1518_instances')
-    assert t1518_instances and len(t1518_instances) == 2
+    print(f'len(t1518_instances) = {len(t1518_instances)}')
+    assert t1518_instances and len(t1518_instances) == 3
 
 
 @then(u'match multiple related/similar TTPs (T1570 and T1021.006)')
 def step_impl(context):
     lateral_movement = context.session.get_variable('lateral_movement')
-    assert not lateral_movement
-    # assert lateral_movement and len(lateral_movement) == 0
+    print(f'len(lateral_movement) = {len(lateral_movement)}')
+    # assert not lateral_movement
+    assert lateral_movement and len(lateral_movement) == 2
 
 
 @then(u'identify phishing candidates on windows')
@@ -59,7 +61,8 @@ def step_impl(context):
 @then(u'identify exploit candidates on linux')
 def step_impl(context):
     exploit_candidates = context.session.get_variable('exploit_candidates')
-    assert exploit_candidates and len(exploit_candidates) == 13
+    print(f'len(exploit_candidates) = {len(exploit_candidates)}')
+    assert exploit_candidates and len(exploit_candidates) == 718
 
 
 @when(u'I start a cross-host campaign discovery with Kestrel')
@@ -93,17 +96,38 @@ def step_impl(context):
     assert lateral_mov_win_nt and len(lateral_mov_win_nt) == 3
     lateral_mov_112_nt = context.session.get_variable('lateral_mov_112_nt')
     assert lateral_mov_112_nt and len(lateral_mov_112_nt) == 3
-    lateral_mov_112_receiver = context.session.get_variable('lateral_mov_112_receiver')
-    assert lateral_mov_112_receiver and len(lateral_mov_112_receiver) == 1
-    splunkd_on_112 = context.session.get_variable('splunkd_on_112')
-    assert splunkd_on_112 and len(splunkd_on_112) == 1
-    splunkd_activities_on_112 = context.session.get_variable('splunkd_activities_on_112')
-    assert splunkd_activities_on_112 and len(splunkd_activities_on_112) == 20
     lateral_mov_linux = context.session.get_variable('lateral_mov_linux')
     assert lateral_mov_linux and len(lateral_mov_linux) == 1
     lateral_mov_linux_nt = context.session.get_variable('lateral_mov_linux_nt')
     assert lateral_mov_linux_nt and len(lateral_mov_linux_nt) == 1
     lateral_mov_91_nt = context.session.get_variable('lateral_mov_91_nt')
     assert lateral_mov_91_nt and len(lateral_mov_91_nt) == 1
-    # linux_proc = context.session.get_variable('linux_proc')
-    # assert linux_proc and len(linux_proc) == 1
+
+@then(u'identify attacker activities on windows hosts')
+def step_impl(context):
+    lateral_mov_112_receiver = context.session.get_variable('lateral_mov_112_receiver')
+    # print(f'lateral_mov_112_receiver = {lateral_mov_112_receiver}')
+    # print(f'len(lateral_mov_112_receiver) = {len(lateral_mov_112_receiver)}')
+    assert lateral_mov_112_receiver and len(lateral_mov_112_receiver) == 2
+    splunkd_on_112 = context.session.get_variable('splunkd_on_112')
+    assert splunkd_on_112 and len(splunkd_on_112) == 1
+    splunkd_activities_on_112 = context.session.get_variable('splunkd_activities_on_112')
+    assert splunkd_activities_on_112 and len(splunkd_activities_on_112) == 20
+
+@then(u'identify attacker activities on linux hosts')
+def step_impl(context):
+    linux_proc = context.session.get_variable('linux_proc')
+    print(f'len(linux_proc) = {len(linux_proc)}')
+    assert linux_proc and len(linux_proc) == 34
+    node_children = context.session.get_variable('node_children')
+    node_grand_children = context.session.get_variable('node_grand_children')
+    print(f'len(node_children) = {len(node_children)}')
+    print(f'len(node_grand_children) = {len(node_grand_children)}')
+    assert node_children and len(node_children) == 303
+    assert node_grand_children and len(node_grand_children) == 363
+
+@then(u'discover the C2 host / IP address if any')
+def step_impl(context):
+    c2_traffic = context.session.get_variable('c2_traffic')
+    print(f'len(c2_traffic) = {len(c2_traffic)}')
+    assert c2_traffic and len(c2_traffic) == 2
