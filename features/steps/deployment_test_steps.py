@@ -57,7 +57,7 @@ def step_impl(context):
 
 @given(u'a hunt flow')
 def step_impl(context):
-    context.hunt_flow =  "newvar = GET process FROM stixshifter://bh22-win01 "\
+    context.hunt_flow =  "newvar = GET process FROM stixshifter://bh22-win-111 "\
         "WHERE [process:name = 'cmd.exe'] "\
         "START 2022-07-01T00:00:00Z STOP 2022-08-01T00:00:00Z"
 
