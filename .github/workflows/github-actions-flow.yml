@@ -42,31 +42,32 @@ jobs:
       - name: Install kestrel and STIX-Shifter from Source Code
         run: |
           source ${{ env.venv_activate }}
-          cd ${{ github.workspace }} 
+          # cd ${{ github.workspace }} 
           ./scripts/install-stix-shifter-kestrel.sh
       - name: Elasticsearch instance setup
         run: |
           source ${{ env.venv_activate }}
-          cd ${{ github.workspace }} 
+          # cd ${{ github.workspace }} 
           ./scripts/install-elastic.sh
       - name: Import test data in elastic instance
         run: ./scripts/import-data.sh
       - name: Check deployment of the test environment
         run: |
           source ${{ env.venv_activate }}
-          cd ${{ github.workspace }} 
+          # cd ${{ github.workspace }} 
           ./scripts/run_kestrel.sh
       - name: Run Integration Tests
         run: |
           source ${{ env.venv_activate }}
-          cd ${{ github.workspace }} 
-          ./scripts/run-bdd-tests.sh
+          # cd ${{ github.workspace }} 
+          ./scripts/prep-bdd-tests.sh
+          behave --logging-level CRITICAL
       - name: Cleanup
         run: |
+          ./scripts/clean-analysis.sh
           docker stop es01test
           docker rm es01test
           docker network rm elastic
           rm -rf data
-
       - name: Job Status
         run: echo "Job status is ${{ job.status }}."

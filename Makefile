@@ -23,4 +23,4 @@ clean-analysis:
 clean-all: clean-elastic clean-data clean-analysis
 	rm -rf ${HOME}/huntingtest
 bdd-tests: check-venv
-	./scripts/run-bdd-tests.sh
+	./scripts/run-bdd-tests-local.sh
