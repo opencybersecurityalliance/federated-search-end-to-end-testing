@@ -18,7 +18,9 @@ clean-elastic:
 	sudo docker stop es01test; sudo docker rm es01test
 clean-data:
 	rm -rf ${HOME}/huntingtest/data
-clean-all: clean-elastic clean-data
+clean-analysis:
+	./scripts/clean-analysis.sh
+clean-all: clean-elastic clean-data clean-analysis
 	rm -rf ${HOME}/huntingtest
 bdd-tests: check-venv
 	./scripts/run-bdd-tests.sh
