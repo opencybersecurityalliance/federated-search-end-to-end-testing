@@ -7,7 +7,7 @@ def run_huntbook(context, huntbook_name):
         huntflow = hff.read()
     context.session.execute(huntflow)
     
-@given(u'a winlogbeats elastic index')
+@given(u'a winlogbeat elastic index')
 def step_impl(context):
     context.winlogbeats_index_name = 'win-111-winlogbeat-bh22-20220727'
 

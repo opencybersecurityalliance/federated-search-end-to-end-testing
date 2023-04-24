@@ -1,6 +1,6 @@
 Feature: Kestrel Data Retrieval
     As a Threat Hunter
-    I need Kestrel and STIX-Shifter to retrive data
+    I need Kestrel and STIX-Shifter to retrieve data
     So that I can match patterns
     And get directions to investigate
     And identify suspicious entities
@@ -9,7 +9,7 @@ Feature: Kestrel Data Retrieval
 Scenario: Start Hunt from TTPs
     Given a Kestrel session
     And a running instance of Elasticsearch
-    And a winlogbeats elastic index
+    And a winlogbeat elastic index
     And a linux sysflow elastic index
     When I start hunt from TTPs with Kestrel
     Then I should find user processes (T1057)
@@ -23,7 +23,7 @@ Scenario: Start Hunt from TTPs
 Scenario: Cross-Host Campaign Discovery
     Given a Kestrel session
     And a running instance of Elasticsearch
-    And a winlogbeats elastic index
+    And a winlogbeat elastic index
     And a linux sysflow elastic index
     When I start a cross-host campaign discovery with Kestrel
     Then I should find successful attacks led by phishing activities
