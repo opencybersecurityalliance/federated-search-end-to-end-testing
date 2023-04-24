@@ -29,6 +29,11 @@ jobs:
           repository: opencybersecurityalliance/kestrel-lang
           ref: develop_stixshifter_v5
           path: './kestrel-lang'
+      - name: Kestrel Analysis Code Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: opencybersecurityalliance/kestrel-analytics
+          path: './kestrel-analytics'
       - name: STIX-Shifter Code Checkout
         uses: actions/checkout@v3
         with:
