@@ -16,5 +16,5 @@ Scenario: Export Kestrel variable to Python
     And a hunt flow
     And a running instance of Elasticsearch
     When I execute the hunt flow with Kestrel
-    Then I should export the Kestrem variable to python
+    Then I should export the Kestrel variable to python
     And close the session

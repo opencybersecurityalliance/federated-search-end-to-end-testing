@@ -10,7 +10,7 @@ check-venv:
 install-code:
 	./scripts/install-stix-shifter-kestrel-local.sh
 import-data:
-	./scripts/import-data-local.sh
+	./scripts/import-data.sh --gh-org cmadam
 install-all: check-venv checkout install-code install-elastic import-data
 check-deployment: check-venv
 	./scripts/run_kestrel.sh
@@ -18,7 +18,9 @@ clean-elastic:
 	sudo docker stop es01test; sudo docker rm es01test
 clean-data:
 	rm -rf ${HOME}/huntingtest/data
-clean-all: clean-elastic clean-data
+clean-analysis:
+	./scripts/clean-analysis.sh
+clean-all: clean-elastic clean-data clean-analysis
 	rm -rf ${HOME}/huntingtest
 bdd-tests: check-venv
-	./scripts/run-bdd-tests.sh
+	./scripts/run-bdd-tests-local.sh

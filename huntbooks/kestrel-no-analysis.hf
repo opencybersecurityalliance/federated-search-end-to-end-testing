@@ -1,0 +1,9 @@
+# let's get network traffic from suspicious (possible C2) process before we apply analytics
+
+splunkd = GET process FROM stixshifter://bh22-linux
+          WHERE name = 'splunkd'
+          START 2022-07-01T00:00:00Z STOP 2022-08-01T00:00:00Z
+splunkd_activities = FIND process CREATED BY splunkd
+# 'traffic' holds the value of traffic before the analytics
+traffic = FIND network-traffic CREATED BY splunkd_activities
+# DISP traffic ATTR src_ref.value, src_port, dst_ref.value, dst_port
