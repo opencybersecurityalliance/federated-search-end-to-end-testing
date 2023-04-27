@@ -57,11 +57,11 @@ do
     python scripts/import_data.py "${dataindex}" --directory "${DATA_DIR}" --organization "${GH_ORG}" --repository "${GH_REPO}"
     echo "Index ${dataindex} ready for uploading into elasticsearch instance"
     sudo docker run --rm --net=host -e NODE_TLS_REJECT_UNAUTHORIZED=0 -v "${DATA_DIR}":/tmp elasticdump/elasticsearch-dump \
-    --output=https://"elastic:${ES_PWD}"@"${HOST_NAME}":"${HOST_PORT}"/"${dataindex}" \
+    --output=https://"elastic:${ES_PWD}@${HOST_NAME}:${HOST_PORT}/${dataindex}" \
     --input=/tmp/"${dataindex}".mapping.json --type=mapping
     echo "Uploaded ${dataindex} mappings in elasticsearch"
     sudo docker run --rm --net=host -e NODE_TLS_REJECT_UNAUTHORIZED=0 -v "${DATA_DIR}":/tmp elasticdump/elasticsearch-dump \
-    --output=https://"elastic:${ES_PWD}"@"${HOST_NAME}":"${HOST_PORT}"/"${dataindex}" \
+    --output=https://"elastic:${ES_PWD}@${HOST_NAME}:${HOST_PORT}/${dataindex}" \
     --input=/tmp/"${dataindex}".json  --limit 25000  --type=data
     echo "Uploaded ${dataindex} in elasticsearch"
 done
