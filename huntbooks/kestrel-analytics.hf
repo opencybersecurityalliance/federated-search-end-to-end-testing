@@ -1,15 +1,7 @@
-# let's get network traffic from suspicious (possible C2) process before we apply analytics
+APPLY docker://domainnamelookup ON traffic
 
-splunkd = GET process FROM stixshifter://bh22-linux
-          WHERE name = 'splunkd'
-          START 2022-07-01T00:00:00Z STOP 2022-08-01T00:00:00Z
-splunkd_activities = FIND process CREATED BY splunkd
-# 'domain_enriched_traffic' holds the value of traffic after the analytics
-domain_enriched_traffic = FIND network-traffic CREATED BY splunkd_activities
-APPLY docker://domainnamelookup ON domain_enriched_traffic
-
-github_traffic = domain_enriched_traffic WHERE x_domain_organization LIKE '%GitHub%'
-iana_traffic = domain_enriched_traffic WHERE x_domain_organization LIKE '%IANA%'
-amazon_traffic = domain_enriched_traffic WHERE x_domain_organization LIKE '%Amazon%'
-akamai_traffic = domain_enriched_traffic WHERE x_domain_organization LIKE '%Akamai%'
-cloudflare_traffic = domain_enriched_traffic WHERE x_domain_organization LIKE '%Cloudflare%'
+github_traffic = traffic WHERE x_domain_organization LIKE '%GitHub%'
+iana_traffic = traffic WHERE x_domain_organization LIKE '%IANA%'
+amazon_traffic = traffic WHERE x_domain_organization LIKE '%Amazon%'
+akamai_traffic = traffic WHERE x_domain_organization LIKE '%Akamai%'
+cloudflare_traffic = traffic WHERE x_domain_organization LIKE '%Cloudflare%'
