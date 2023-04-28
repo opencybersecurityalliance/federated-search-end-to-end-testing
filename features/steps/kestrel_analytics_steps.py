@@ -9,12 +9,13 @@ def run_huntbook(context, huntbook_name):
 
 @when(u'I apply the docker domainnamelookup analysis on the network traffic from suspicious processes')
 def step_impl(context):
-    run_huntbook(context, 'kestrel-analysis.hf')
+    run_huntbook(context, 'kestrel-before-analytics.hf')
+    run_huntbook(context, 'kestrel-analytics.hf')
 
 
 @then(u'I should see customized attributes x_domain_name and x_domain_organization in network traffic')
 def step_impl(context):
-    traffic_var = context.session.get_variable('domain_enriched_traffic')
+    traffic_var = context.session.get_variable('traffic')
     for traffic in traffic_var:
         traffic_attrs = traffic.keys()
         assert ('x_domain_name' in traffic_attrs and
@@ -46,7 +47,7 @@ def step_impl(context):
 
 @when(u'I get the network traffic from suspicious processes without applying analytics')
 def step_impl(context):
-    run_huntbook(context, 'kestrel-no-analysis.hf')
+    run_huntbook(context, 'kestrel-before-analytics.hf')
 
 @then(u'I should not see x_domain_name and x_domain_organization customized attributes in network traffic')
 def step_impl(context):
