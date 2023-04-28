@@ -1,4 +1,4 @@
-Feature: Kestrel Analysis
+Feature: Kestrel Analytics
     As a Threat Hunter
     I need Kestrel to analyze data
     So that I can enrich data from other sources like threat intelligence
