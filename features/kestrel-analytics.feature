@@ -4,7 +4,7 @@ Feature: Kestrel Analytics
     So that I can enrich data from other sources like threat intelligence
     And pre-program detection logic (in white-box or black-box)
 
-Scenario: Get Network Traffic without Analytics
+Scenario: Get Network Traffic before Analytics
     Given a Kestrel session
     And a running instance of Elasticsearch
     And a winlogbeat elastic index
