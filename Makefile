@@ -15,12 +15,12 @@ install-all: check-venv checkout install-code install-elastic import-data
 check-deployment: check-venv
 	./scripts/run_kestrel.sh
 clean-elastic:
-	sudo docker stop es01test; sudo docker rm es01test
+	./scripts/clean-elastic.sh
 clean-data:
 	rm -rf ${HOME}/huntingtest/data
-clean-analysis:
-	./scripts/clean-analysis.sh
-clean-all: clean-elastic clean-data clean-analysis
+clean-analytics:
+	./scripts/clean-analytics.sh
+clean-all: clean-elastic clean-data clean-analytics
 	rm -rf ${HOME}/huntingtest
 bdd-tests: check-venv
 	./scripts/run-bdd-tests-local.sh
