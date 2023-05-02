@@ -66,9 +66,8 @@ jobs:
           behave --logging-level CRITICAL
       - name: Cleanup
         run: |
-          ./scripts/clean-analysis.sh
-          docker stop es01test
-          docker rm es01test
+          ./scripts/clean-analytics.sh
+          ./scripts/clean-elastic.sh
           docker network rm elastic
           rm -rf data
       - name: Job Status
