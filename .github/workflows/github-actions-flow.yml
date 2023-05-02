@@ -14,8 +14,8 @@ jobs:
   integration-testing:
     runs-on: ubuntu-20.04
     env:
-        stix_shifter_branch: develop
-        kestrel_branch: develop_stixshifter_v5
+        stix_shifter_branch: develop_4.x
+        kestrel_branch: develop
         kestrel_analytics_branch: release
     steps:
       - name: Worflow Information
