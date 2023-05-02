@@ -11,8 +11,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  integrated-testing:
+  integration-testing:
     runs-on: ubuntu-20.04
+    env:
+        stix_shifter_branch: develop
+        kestrel_branch: develop_stixshifter_v5
+        kestrel_analytics_branch: release
     steps:
       - name: Worflow Information
         run: |
@@ -27,17 +31,19 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: opencybersecurityalliance/kestrel-lang
-          ref: develop_stixshifter_v5
+          ref: ${{ env.kestrel_branch }}
           path: './kestrel-lang'
-      - name: Kestrel Analysis Code Checkout
+      - name: Kestrel Analytics Code Checkout
         uses: actions/checkout@v3
         with:
           repository: opencybersecurityalliance/kestrel-analytics
+          ref: ${{ env.kestrel_analytics_branch }}
           path: './kestrel-analytics'
       - name: STIX-Shifter Code Checkout
         uses: actions/checkout@v3
         with:
           repository: opencybersecurityalliance/stix-shifter
+          ref: ${{ env.stix_shifter_branch }}
           path: './stix-shifter'
       - name: Create Virtual Environment
         run: |
