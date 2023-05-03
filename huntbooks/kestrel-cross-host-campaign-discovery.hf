@@ -23,7 +23,9 @@ lateral_mov_112_nt = GET network-traffic FROM stixshifter://bh22-win-112
 
 # DISP lateral_mov_112_nt ATTR src_ref.value, src_port, dst_ref.value, dst_port
 
-lateral_mov_112_receiver = FIND process CREATED lateral_mov_112_nt
+lateral_mov_112_proc = FIND process CREATED lateral_mov_112_nt
+
+lateral_mov_112_receiver = lateral_mov_112_proc WHERE x_unique_id != lateral_mov_win.x_unique_id
 
 splunkd_on_112 = GET process
                  FROM stixshifter://bh22-win-111
