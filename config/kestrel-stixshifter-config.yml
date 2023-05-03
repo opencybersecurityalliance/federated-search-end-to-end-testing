@@ -41,31 +41,3 @@ profiles:
             auth:
                 username: elastic
                 password: <ES_PWD>
-    bh22-win02:
-        connector: elastic_ecs
-        connection:
-            host: localhost
-            port: 9234
-            selfSignedCert: false
-            indices: win-111-winlogbeat-test-20220726
-            options:
-                dialects:
-                  - beats
-        config:
-            auth:
-                username: elastic
-                password: <ES_PWD>
-    bh22-linux01:
-        connector: elastic_ecs
-        connection:
-            host: localhost
-            port: 9234
-            selfSignedCert: false
-            indices: linux-91-sysflow-test-20220725
-            options:
-                dialects:
-                  - beats
-        config:
-            auth:
-                username: elastic
-                password: <ES_PWD>
