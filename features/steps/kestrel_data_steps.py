@@ -148,12 +148,12 @@ def step_impl(context):
 
 @then(u'identify attacker activities on windows hosts')
 def step_impl(context):
+    lateral_mov_112_proc = context.session.get_variable('lateral_mov_112_proc')
+    assert lateral_mov_112_proc and len(lateral_mov_112_proc) == 2
+    lm_112_mov_summary = context.campaign_summary.get('lateral_mov_112_proc', {})
+    assert lm_112_mov_summary and lm_112_mov_summary.get('#(RECORDS)') == 20
     lateral_mov_112_receiver = context.session.get_variable('lateral_mov_112_receiver')
-    # print(f'lateral_mov_112_receiver = {lateral_mov_112_receiver}')
-    # print(f'len(lateral_mov_112_receiver) = {len(lateral_mov_112_receiver)}')
-    assert lateral_mov_112_receiver and len(lateral_mov_112_receiver) == 2
-    lm_112_recv_summary = context.campaign_summary.get('lateral_mov_112_receiver', {})
-    assert lm_112_recv_summary and lm_112_recv_summary.get('#(RECORDS)') == 20
+    assert lateral_mov_112_receiver and len(lateral_mov_112_receiver) == 1
     splunkd_on_112 = context.session.get_variable('splunkd_on_112')
     assert splunkd_on_112 and len(splunkd_on_112) == 1
     splunkd_112_summary = context.campaign_summary.get('splunkd_on_112', {})
