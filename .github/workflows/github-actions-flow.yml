@@ -67,7 +67,7 @@ jobs:
       - name: Run Integration Tests
         run: |
           source ${{ env.venv_activate }}
-          ./scripts/prep-bdd-tests.sh
+          ./scripts/prep-bdd-tests.sh ${PWD}
           export KESTREL_STIXSHIFTER_CONFIG=${HOME}/huntingtest/kestrel-stixshifter-config.yaml
           behave --logging-level CRITICAL
       - name: Cleanup
