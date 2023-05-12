@@ -27,7 +27,7 @@ jobs:
       - name: Kestrel Code Checkout
         uses: actions/checkout@v3
         with:
-          repository: tingdai/kestrel-lang
+          repository: tingdai/kestrel-lang-ting-dev
           ref: ${{ env.kestrel_branch }}
           path: './kestrel-lang'
       - name: Kestrel Analytics Code Checkout
