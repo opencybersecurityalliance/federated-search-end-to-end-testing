@@ -1,0 +1,71 @@
+name: Kestrel Integration Testing
+on: 
+  workflow_dispatch
+
+  # This allows a subsequently queued workflow run to interrupt previous runs
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  kestrel-integration-testing:
+    runs-on: ubuntu-20.04
+    env:
+        stix_shifter_branch: develop
+        kestrel_branch: develop
+        kestrel_analytics_branch: release
+    steps:
+      - name: Worflow Information
+        run: |
+          echo "Triggered by ${{ github.actor }} through a ${{ github.event_name }} event."
+          echo "Running on a ${{ runner.os }} server hosted by GitHub"
+          echo "Running in ${{ github.repository }} repository, ${{ github.ref }} branch."
+          echo "HOME = ${HOME}"
+          mkdir -p ${HOME}/huntingtest
+      - name: Code Checkout
+        uses: actions/checkout@v3
+      - name: Kestrel Code Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: opencybersecurityalliance/kestrel-lang
+          ref: ${{ env.kestrel_branch }}
+          path: './kestrel-lang'
+      - name: Kestrel Analytics Code Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: opencybersecurityalliance/kestrel-analytics
+          ref: ${{ env.kestrel_analytics_branch }}
+          path: './kestrel-analytics'
+      - name: Create Virtual Environment
+        run: |
+          ./scripts/create-venv.sh
+          . huntingtest/bin/activate
+          echo "venv_activate=$VIRTUAL_ENV/bin/activate" >> $GITHUB_ENV
+      - name: Install kestrel from Source Code
+        run: |
+          source ${{ env.venv_activate }}
+          ./scripts/install-kestrel.sh
+      - name: Elasticsearch instance setup
+        run: |
+          source ${{ env.venv_activate }}
+          ./scripts/install-elastic.sh
+      - name: Import test data in elastic instance
+        run: ./scripts/import-data.sh
+      - name: Check deployment of the test environment
+        run: |
+          source ${{ env.venv_activate }}
+          ./scripts/run_kestrel.sh
+      - name: Run Integration Tests
+        run: |
+          source ${{ env.venv_activate }}
+          ./scripts/prep-bdd-tests.sh ${PWD}
+          export KESTREL_STIXSHIFTER_CONFIG=${HOME}/huntingtest/kestrel-stixshifter-config.yaml
+          behave --logging-level CRITICAL
+      - name: Cleanup
+        run: |
+          ./scripts/clean-analytics.sh
+          ./scripts/clean-elastic.sh
+          docker network rm elastic
+          rm -rf data
+      - name: Job Status
+        run: echo "Job status is ${{ job.status }}."
