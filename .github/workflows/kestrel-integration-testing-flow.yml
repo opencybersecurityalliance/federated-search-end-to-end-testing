@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
         stix_shifter_branch: develop
-        kestrel_branch: develop
+        kestrel_branch: pipeline
         kestrel_analytics_branch: release
     steps:
       - name: Worflow Information
@@ -27,7 +27,7 @@ jobs:
       - name: Kestrel Code Checkout
         uses: actions/checkout@v3
         with:
-          repository: opencybersecurityalliance/kestrel-lang
+          repository: tingdai/kestrel-lang
           ref: ${{ env.kestrel_branch }}
           path: './kestrel-lang'
       - name: Kestrel Analytics Code Checkout
