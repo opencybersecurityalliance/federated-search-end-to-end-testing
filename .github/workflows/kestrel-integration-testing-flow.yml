@@ -1,6 +1,19 @@
 name: Kestrel Integration Testing
-on: 
-  workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      organization:
+        description: 'Kestrel repo organization'
+        required: true
+        default: 'opencybersecurityalliance'
+      repository:
+        description: 'Kestrel repo name'
+        required: true
+        default: 'kestrel-lang'
+      branch:
+        description: 'Kestrel repo branch'
+        required: true
+        default: 'develop'
 
   # This allows a subsequently queued workflow run to interrupt previous runs
 concurrency:
@@ -11,8 +24,6 @@ jobs:
   kestrel-integration-testing:
     runs-on: ubuntu-20.04
     env:
-        stix_shifter_branch: develop
-        kestrel_branch: develop
         kestrel_analytics_branch: release
     steps:
       - name: Worflow Information
@@ -27,8 +38,8 @@ jobs:
       - name: Kestrel Code Checkout
         uses: actions/checkout@v3
         with:
-          repository: opencybersecurityalliance/kestrel-lang
-          ref: ${{ env.kestrel_branch }}
+          repository: ${{ github.event.inputs.organization }}/${{ github.event.inputs.repository }}
+          ref: ${{ github.event.inputs.branch }}
           path: './kestrel-lang'
       - name: Kestrel Analytics Code Checkout
         uses: actions/checkout@v3
