@@ -1,10 +1,10 @@
 .PHONY: all checkout install-elastic venv install-code import-data clean-elastic clean-data clean-all install-all check-deployment
+venv:
+	./federated-search-core/setup/create-venv.sh
 install-elastic:
 	./scripts/install-elastic.sh
 checkout:
 	./scripts/checkout-code.sh
-venv:
-	./scripts/create-venv-local.sh
 check-venv:
 	./scripts/check-venv.sh
 install-code:

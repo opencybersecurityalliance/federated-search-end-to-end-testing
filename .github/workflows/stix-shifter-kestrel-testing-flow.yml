@@ -1,0 +1,54 @@
+name: Integration Testing for Kestrel and STIX-Shifter Using GitHub Actions
+on: 
+  workflow_dispatch:
+    inputs:
+      stix_shifter_organization:
+        description: 'STIX-Shifter repo organization'
+        required: true
+        default: 'opencybersecurityalliance'
+      stix_shifter_repository:
+        description: 'STIX-Shifter repo name'
+        required: true
+        default: 'stix-shifter'
+      stix_shifter_branch:
+        description: 'STIX-Shifter repo branch'
+        required: true
+        default: 'develop'
+      kestrel_organization:
+        description: 'Kestrel repo organization'
+        required: true
+        default: 'opencybersecurityalliance'
+      kestrel_repository:
+        description: 'Kestrel repo name'
+        required: true
+        default: 'kestrel-lang'
+      kestrel_branch:
+        description: 'Kestrel repo branch'
+        required: true
+        default: 'develop'
+
+# This allows a subsequently queued workflow run to interrupt previous runs
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  integration-testing:
+    runs-on: ubuntu-20.04
+    env:
+        kestrel_analytics_branch: release
+    steps:
+      - name: Worflow Information
+        run: |
+          echo "Triggered by ${{ github.actor }} through a ${{ github.event_name }} event."
+          echo "Running on a ${{ runner.os }} server hosted by GitHub"
+          echo "Running in ${{ github.repository }} repository, ${{ github.ref }} branch."
+          echo "HOME = ${HOME}"
+          mkdir -p ${HOME}/huntingtest
+      - name: Code Checkout
+        uses: actions/checkout@v3
+      - name: Create Virtual Environment
+        run: |
+          ./federated-search-core/setup/create-venv.sh
+          source "$HOME"/fedsearchtest/fedsearchtest/bin/activate
+          echo "venv_activate=$VIRTUAL_ENV/bin/activate" >> $GITHUB_ENV
