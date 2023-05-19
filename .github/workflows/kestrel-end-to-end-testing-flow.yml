@@ -57,5 +57,18 @@ jobs:
         run: |
           source ${{ env.venv_activate }}
           ./upper-layer-integration/kestrel/setup/install-kestrel.sh
+      - name: Elasticsearch instance setup
+        run: |
+          source ${{ env.venv_activate }}
+          ./federated-search-core/setup/elastic-ecs/install-elastic.sh
+      - name: Import test data in elastic instance
+        run: ./federated-search-core/setup/elastic-ecs/import-data.sh
+      - name: Cleanup
+        run: |
+          ./federated-search-core/setup/elastic-ecs/clean-elastic.sh
+          docker network rm elastic
+          rm -rf data
+  
+
       - name: Job Status
         run: echo "Job status is ${{ job.status }}."

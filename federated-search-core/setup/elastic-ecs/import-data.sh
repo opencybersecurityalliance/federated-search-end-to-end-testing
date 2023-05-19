@@ -10,7 +10,7 @@ HOST_NAME=localhost
 HOST_PORT=9234
 GH_ORG=opencybersecurityalliance
 GH_REPO=data-bucket-kestrel
-DATA_DIR="${HOME}"/huntingtest/data
+DATA_DIR="${HOME}"/fedsearchtest/data
 
 while true
 do
@@ -48,13 +48,13 @@ do
     esac
 done
 
-ES_PWD=$(cat "${HOME}"/huntingtest/.es_pwd)
+ES_PWD=$(cat "${HOME}"/fedsearchtest/.es_pwd)
 mkdir -p "${DATA_DIR}"
 dataindexes=( "linux-91-sysflow-bh22-20220727" "win-111-winlogbeat-bh22-20220727" "win-112-winlogbeat-bh22-20220727" )
 for dataindex in "${dataindexes[@]}" 
 do
-    echo "Running python scripts/import_data.py ${dataindex} --directory ${DATA_DIR} --organization ${GH_ORG} --repository ${GH_REPO}"
-    python scripts/import_data.py "${dataindex}" --directory "${DATA_DIR}" --organization "${GH_ORG}" --repository "${GH_REPO}"
+    echo "Running python federated-search-core/setup/elastic-ecs/import_data.py ${dataindex} --directory ${DATA_DIR} --organization ${GH_ORG} --repository ${GH_REPO}"
+    python federated-search-core/setup/elastic-ecs/import_data.py "${dataindex}" --directory "${DATA_DIR}" --organization "${GH_ORG}" --repository "${GH_REPO}"
     echo "Index ${dataindex} ready for uploading into elasticsearch instance"
     sudo docker run --rm --net=host -e NODE_TLS_REJECT_UNAUTHORIZED=0 -v "${DATA_DIR}":/tmp elasticdump/elasticsearch-dump \
     --output=https://"elastic:${ES_PWD}@${HOST_NAME}:${HOST_PORT}/${dataindex}" \

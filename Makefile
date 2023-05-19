@@ -15,23 +15,24 @@ install-kestrel-stix-shifter: export STIX_SHIFTER_TEST_VERSION=9.9.99
 install-kestrel-stix-shifter: check-venv install-stix-shifter install-kestrel
 
 install-elastic:
-	./scripts/install-elastic.sh
-checkout:
-	./scripts/checkout-code.sh
-install-code:
-	./scripts/install-stix-shifter-kestrel-local.sh
-import-data:
-	./scripts/import-data.sh --gh-org cmadam
-install-all: check-venv checkout install-code install-elastic import-data
+	./federated-search-core/setup/elastic-ecs/install-elastic.sh
+import-data-elastic:
+	./federated-search-core/setup/elastic-ecs/import-data.sh
+elastic: install-elastic import-data-elastic
+
+install-kestrel-elastic: check-venv install-kestrel elastic
+
+install-kestrel-stix-shifter-elastic: check-venv install-kestrel-stix-shifter elastic
+
 check-deployment: check-venv
 	./scripts/run_kestrel.sh
 clean-elastic:
-	./scripts/clean-elastic.sh
+	./federated-search-core/setup/elastic-ecs/clean-elastic.sh
 clean-data:
-	rm -rf ${HOME}/huntingtest/data
+	rm -rf ${HOME}/fedsearchtest/data
 clean-analytics:
 	./scripts/clean-analytics.sh
 clean-all: clean-elastic clean-data clean-analytics
-	rm -rf ${HOME}/huntingtest
+	rm -rf ${HOME}/fedsearchtest
 bdd-tests: check-venv
 	./scripts/run-bdd-tests-local.sh
