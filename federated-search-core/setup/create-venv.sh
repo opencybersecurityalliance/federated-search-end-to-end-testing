@@ -6,12 +6,12 @@ VIRTUALENV="$(which virtualenv)"
 if [[ -z "$VIRTUALENV" ]]; then
     echo "virtualenv not installed, or not in the PATH env variable"
     echo "Attempting to create virtual environment using venv"
-    python3 -m venv fedsearchtest
-    if [ $? -eq 0 ]; then
-	echo "Successfully create virtual environment using venv"
+    
+    if ! python3 -m venv fedsearchtest; then
+	    echo "Successfully created virtual environment using venv"
     else
-	echo "Please install virtualenv and/or venv and add its folder to PATH"
-	exit 1
+        echo "Please install virtualenv and/or venv and add its folder to PATH"
+        exit 1
     fi
 else
     "${VIRTUALENV}" -p python3 fedsearchtest
