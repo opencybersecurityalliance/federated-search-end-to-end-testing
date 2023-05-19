@@ -20,12 +20,14 @@ import-data-elastic:
 	./federated-search-core/setup/elastic-ecs/import-data.sh
 elastic: install-elastic import-data-elastic
 
-install-kestrel-elastic: check-venv install-kestrel elastic
+deploy-kestrel: export KESTREL_STIXSHIFTER_CONFIG=${HOME}/fedsearchtest/kestrel-stixshifter-config.yaml
+deploy-kestrel: check-venv
+	./upper-layer-integration/kestrel/setup/deploy-kestrel.sh
 
-install-kestrel-stix-shifter-elastic: check-venv install-kestrel-stix-shifter elastic
+install-kestrel-elastic: check-venv install-kestrel elastic deploy-kestrel
 
-check-deployment: check-venv
-	./scripts/run_kestrel.sh
+install-kestrel-stix-shifter-elastic: check-venv install-kestrel-stix-shifter elastic deploy-kestrel
+
 clean-elastic:
 	./federated-search-core/setup/elastic-ecs/clean-elastic.sh
 clean-data:

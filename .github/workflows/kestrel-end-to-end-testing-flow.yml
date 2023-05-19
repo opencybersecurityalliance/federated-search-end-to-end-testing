@@ -63,6 +63,11 @@ jobs:
           ./federated-search-core/setup/elastic-ecs/install-elastic.sh
       - name: Import test data in elastic instance
         run: ./federated-search-core/setup/elastic-ecs/import-data.sh
+      - name: Finalize and check Kestrel and Elasticsearch deployment in the test environment
+        run: |
+          source ${{ env.venv_activate }}
+          export KESTREL_STIXSHIFTER_CONFIG=${HOME}/fedsearchtest/kestrel-stixshifter-config.yaml
+          ./upper-layer-integration/kestrel/setup/deploy-kestrel.sh
       - name: Cleanup
         run: |
           ./federated-search-core/setup/elastic-ecs/clean-elastic.sh
