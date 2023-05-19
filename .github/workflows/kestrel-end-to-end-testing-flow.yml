@@ -1,4 +1,4 @@
-name: Kestrel Integration Testing
+name: Kestrel End-to-End Testing
 on:
   workflow_dispatch:
     inputs:
