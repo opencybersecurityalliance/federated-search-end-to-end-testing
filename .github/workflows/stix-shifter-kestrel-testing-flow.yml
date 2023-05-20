@@ -65,6 +65,12 @@ jobs:
           repository: ${{ github.event.inputs.kestrel_organization }}/${{ github.event.inputs.kestrel_repository }}
           ref: ${{ github.event.inputs.kestrel_branch }}
           path: './kestrel-lang'
+      - name: Kestrel Analytics Code Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: opencybersecurityalliance/kestrel-analytics
+          ref: ${{ env.kestrel_analytics_branch }}
+          path: './kestrel-analytics'
       - name: Install kestrel and STIX-Shifter from Source Code
         run: |
           source ${{ env.venv_activate }}
@@ -84,7 +90,6 @@ jobs:
           ./upper-layer-integration/kestrel/setup/deploy-kestrel.sh
       - name: Install Kestrel Analytics
         run: ./upper-layer-integration/kestrel-analytics/setup/install-kestrel-analytics.sh
-  
       - name: Cleanup
         run: |
           ./federated-search-core/setup/elastic-ecs/clean-elastic.sh
