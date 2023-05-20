@@ -82,6 +82,9 @@ jobs:
           source ${{ env.venv_activate }}
           export KESTREL_STIXSHIFTER_CONFIG=${HOME}/fedsearchtest/kestrel-stixshifter-config.yaml
           ./upper-layer-integration/kestrel/setup/deploy-kestrel.sh
+      - name: Install Kestrel Analytics
+        run: ./upper-layer-integration/kestrel-analytics/setup/install-kestrel-analytics.sh
+  
       - name: Cleanup
         run: |
           ./federated-search-core/setup/elastic-ecs/clean-elastic.sh

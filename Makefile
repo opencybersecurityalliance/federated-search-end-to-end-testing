@@ -28,12 +28,18 @@ install-kestrel-elastic: check-venv install-kestrel elastic deploy-kestrel
 
 install-kestrel-stix-shifter-elastic: check-venv install-kestrel-stix-shifter elastic deploy-kestrel
 
+checkout-kestrel-analytics:
+	./upper-layer-integration/kestrel-analytics/setup/checkout-kestrel-analytics.sh
+install-kestrel-analytics: checkout-kestrel-analytics
+	./upper-layer-integration/kestrel-analytics/setup/install-kestrel-analytics.sh
+
+
 clean-elastic:
 	./federated-search-core/setup/elastic-ecs/clean-elastic.sh
 clean-data:
 	rm -rf ${HOME}/fedsearchtest/data
 clean-analytics:
-	./scripts/clean-analytics.sh
+	./upper-layer-integration/kestrel-analytics/setup/clean-analytics.sh
 clean-all: clean-elastic clean-data clean-analytics
 	rm -rf ${HOME}/fedsearchtest
 bdd-tests: check-venv
