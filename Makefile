@@ -33,6 +33,8 @@ checkout-kestrel-analytics:
 install-kestrel-analytics: checkout-kestrel-analytics
 	./upper-layer-integration/kestrel-analytics/setup/install-kestrel-analytics.sh
 
+test-kestrel-elastic: check-venv
+	./upper-layer-integration/kestrel/test/run-tests.sh
 
 clean-elastic:
 	./federated-search-core/setup/elastic-ecs/clean-elastic.sh
@@ -42,5 +44,3 @@ clean-analytics:
 	./upper-layer-integration/kestrel-analytics/setup/clean-analytics.sh
 clean-all: clean-elastic clean-data clean-analytics
 	rm -rf ${HOME}/fedsearchtest
-bdd-tests: check-venv
-	./scripts/run-bdd-tests-local.sh

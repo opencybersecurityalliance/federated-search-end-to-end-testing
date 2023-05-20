@@ -90,6 +90,10 @@ jobs:
           ./upper-layer-integration/kestrel/setup/deploy-kestrel.sh
       - name: Install Kestrel Analytics
         run: ./upper-layer-integration/kestrel-analytics/setup/install-kestrel-analytics.sh
+      - name: Run End-to-End Tests
+        run: |
+          source ${{ env.venv_activate }}
+          ./upper-layer-integration/kestrel/test/run-tests.sh
       - name: Cleanup
         run: |
           ./federated-search-core/setup/elastic-ecs/clean-elastic.sh

@@ -2,7 +2,7 @@ from behave import given, when, then
 import os
 
 def run_huntbook(context, huntbook_name):
-    huntflow_file =  os.path.join('huntbooks', huntbook_name)
+    huntflow_file =  os.path.join('huntflows', huntbook_name)
     summary_vars_dict = {}
     with open(huntflow_file, 'r') as hff:
         huntflow = hff.read()

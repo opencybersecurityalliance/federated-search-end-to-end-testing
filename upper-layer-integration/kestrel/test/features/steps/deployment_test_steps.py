@@ -21,7 +21,7 @@ def step_impl(context):
 
 @given(u'a huntbook named "kestrel-test.hf"')
 def step_impl(context):
-    context.huntbook_name = os.path.join('huntbooks', 'kestrel-test.hf')
+    context.huntbook_name = os.path.join('huntflows', 'kestrel-test.hf')
 
 @when(u'I read with Kestrel the huntbook "kestrel-test.hf"')
 def step_impl(context):
