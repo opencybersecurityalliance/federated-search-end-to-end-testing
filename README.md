@@ -1,4 +1,4 @@
-# federated-search-end-to-end-testing
+# Federated Search End-To-End Testing
 Open-source end-to-end testing framework for applications built on top of STIX-Shifter with live data sources
 
 ## Running the Tests Locally
