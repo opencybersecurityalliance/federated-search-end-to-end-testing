@@ -1,4 +1,3 @@
-.PHONY: all checkout install-elastic venv install-code import-data clean-elastic clean-data clean-all install-all check-deployment
 venv:
 	./federated-search-core/setup/create-venv.sh
 check-venv:
@@ -24,14 +23,14 @@ deploy-kestrel: export KESTREL_STIXSHIFTER_CONFIG=${HOME}/fedsearchtest/kestrel-
 deploy-kestrel: check-venv
 	./upper-layer-integration/kestrel/setup/deploy-kestrel.sh
 
-install-kestrel-elastic: check-venv install-kestrel elastic deploy-kestrel
-
-install-kestrel-stix-shifter-elastic: check-venv install-kestrel-stix-shifter elastic deploy-kestrel
-
 checkout-kestrel-analytics:
 	./upper-layer-integration/kestrel-analytics/setup/checkout-kestrel-analytics.sh
 install-kestrel-analytics: checkout-kestrel-analytics
 	./upper-layer-integration/kestrel-analytics/setup/install-kestrel-analytics.sh
+
+setup-test-env-kestrel-elastic: check-venv install-kestrel elastic deploy-kestrel install-kestrel-analytics
+
+setup-test-env-kestrel-stix-shifter-elastic: check-venv install-kestrel-stix-shifter elastic deploy-kestrel install-kestrel-analytics
 
 test-kestrel-elastic: check-venv
 	./upper-layer-integration/kestrel/test/run-tests.sh
