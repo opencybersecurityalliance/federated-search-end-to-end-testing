@@ -7,9 +7,9 @@ echo "Created 'elastic' docker network"
 echo "sudo docker run -d --name es01test -e ES_JAVA_OPTS=\"-Xms1g -Xmx1g\" -e \"discovery.type=single-node\" --net elastic -p 9234:9200 -it docker.elastic.co/elasticsearch/elasticsearch:8.6.2"
 sudo docker run -d --name es01test -e ES_JAVA_OPTS="-Xms1g -Xmx1g" -e "discovery.type=single-node" --net elastic -p 9234:9200 -it docker.elastic.co/elasticsearch/elasticsearch:8.6.2
 pip install requests
-python scripts/setup_elastic.py
+python federated-search-core/setup/elastic-ecs/setup_elastic.py
 
 echo "sudo docker exec -it es01test bash -c \"bin/elasticsearch-reset-password -u elastic -s -b\""
-sudo docker exec es01test bash -lc "bin/elasticsearch-reset-password -u elastic -s -b" > "${HOME}"/huntingtest/.es_pwd
+sudo docker exec es01test bash -lc "bin/elasticsearch-reset-password -u elastic -s -b" | tee "${HOME}"/fedsearchtest/.es_pwd > /dev/null
 
-python scripts/setup_elastic.py --secure
+python federated-search-core/setup/elastic-ecs/setup_elastic.py --secure

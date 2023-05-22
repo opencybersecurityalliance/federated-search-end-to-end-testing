@@ -1,0 +1,103 @@
+name: End-to-End Testing for Kestrel and STIX-Shifter Using GitHub Actions
+on: 
+  workflow_dispatch:
+    inputs:
+      stix_shifter_organization:
+        description: 'STIX-Shifter repo organization'
+        required: true
+        default: 'opencybersecurityalliance'
+      stix_shifter_repository:
+        description: 'STIX-Shifter repo name'
+        required: true
+        default: 'stix-shifter'
+      stix_shifter_branch:
+        description: 'STIX-Shifter repo branch'
+        required: true
+        default: 'develop'
+      kestrel_organization:
+        description: 'Kestrel repo organization'
+        required: true
+        default: 'opencybersecurityalliance'
+      kestrel_repository:
+        description: 'Kestrel repo name'
+        required: true
+        default: 'kestrel-lang'
+      kestrel_branch:
+        description: 'Kestrel repo branch'
+        required: true
+        default: 'develop'
+
+# This allows a subsequently queued workflow run to interrupt previous runs
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  end-to-end-testing:
+    runs-on: ubuntu-20.04
+    env:
+        kestrel_analytics_branch: release
+        venv_activate: 
+    steps:
+      - name: Worflow Information
+        run: |
+          echo "Triggered by ${{ github.actor }} through a ${{ github.event_name }} event."
+          echo "Running on a ${{ runner.os }} server hosted by GitHub"
+          echo "Running in ${{ github.repository }} repository, ${{ github.ref }} branch."
+          echo "HOME = ${HOME}"
+          mkdir -p ${HOME}/fedsearchtest
+      - name: Code Checkout
+        uses: actions/checkout@v3
+      - name: Create Virtual Environment
+        run: |
+          ./federated-search-core/setup/create-venv.sh
+          source "$HOME/fedsearchtest/fedsearchtest/bin/activate"
+          echo "venv_activate=$VIRTUAL_ENV/bin/activate" >> $GITHUB_ENV
+      - name: STIX-Shifter Code Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.inputs.stix_shifter_organization }}/${{ github.event.inputs.stix_shifter_repository }}
+          ref: ${{ github.event.inputs.stix_shifter_branch }}
+          path: './stix-shifter'
+      - name: Kestrel Code Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.inputs.kestrel_organization }}/${{ github.event.inputs.kestrel_repository }}
+          ref: ${{ github.event.inputs.kestrel_branch }}
+          path: './kestrel-lang'
+      - name: Kestrel Analytics Code Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: opencybersecurityalliance/kestrel-analytics
+          ref: ${{ env.kestrel_analytics_branch }}
+          path: './kestrel-analytics'
+      - name: Install kestrel and STIX-Shifter from Source Code
+        run: |
+          source ${{ env.venv_activate }}
+          export STIX_SHIFTER_TEST_VERSION=9.9.99
+          ./federated-search-core/setup/stix-shifter/install-stix-shifter.sh
+          ./upper-layer-integration/kestrel/setup/install-kestrel.sh
+      - name: Elasticsearch instance setup
+        run: |
+          source ${{ env.venv_activate }}
+          ./federated-search-core/setup/elastic-ecs/install-elastic.sh
+      - name: Import test data in elastic instance
+        run: ./federated-search-core/setup/elastic-ecs/import-data.sh
+      - name: Finalize and check Kestrel and Elasticsearch deployment in the test environment
+        run: |
+          source ${{ env.venv_activate }}
+          export KESTREL_STIXSHIFTER_CONFIG=${HOME}/fedsearchtest/kestrel-stixshifter-config.yaml
+          ./upper-layer-integration/kestrel/setup/deploy-kestrel.sh
+      - name: Install Kestrel Analytics
+        run: ./upper-layer-integration/kestrel-analytics/setup/install-kestrel-analytics.sh
+      - name: Run End-to-End Tests
+        run: |
+          source ${{ env.venv_activate }}
+          ./upper-layer-integration/kestrel/test/run-tests.sh
+      - name: Cleanup
+        run: |
+          ./federated-search-core/setup/elastic-ecs/clean-elastic.sh
+          docker network rm elastic
+          rm -rf data
+      - name: Job Status
+        run: echo "Job status is ${{ job.status }}."

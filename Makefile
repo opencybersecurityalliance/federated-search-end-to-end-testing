@@ -1,26 +1,45 @@
-.PHONY: all checkout install-elastic venv install-code import-data clean-elastic clean-data clean-all install-all check-deployment
-install-elastic:
-	./scripts/install-elastic.sh
-checkout:
-	./scripts/checkout-code.sh
 venv:
-	./scripts/create-venv-local.sh
+	./federated-search-core/setup/create-venv.sh
 check-venv:
-	./scripts/check-venv.sh
-install-code:
-	./scripts/install-stix-shifter-kestrel-local.sh
-import-data:
-	./scripts/import-data.sh --gh-org cmadam
-install-all: check-venv checkout install-code install-elastic import-data
-check-deployment: check-venv
-	./scripts/run_kestrel.sh
+	./federated-search-core/setup/check-venv.sh
+checkout-stix-shifter:
+	./federated-search-core/setup/stix-shifter/checkout-stix-shifter.sh
+install-stix-shifter: check-venv checkout-stix-shifter
+	./federated-search-core/setup/stix-shifter/install-stix-shifter.sh
+checkout-kestrel:
+	./upper-layer-integration/kestrel/setup/checkout-kestrel.sh
+install-kestrel: check-venv checkout-kestrel
+	./upper-layer-integration/kestrel/setup/install-kestrel.sh
+install-kestrel-stix-shifter: export STIX_SHIFTER_TEST_VERSION=9.9.99
+install-kestrel-stix-shifter: check-venv install-stix-shifter install-kestrel
+
+install-elastic:
+	./federated-search-core/setup/elastic-ecs/install-elastic.sh
+import-data-elastic:
+	./federated-search-core/setup/elastic-ecs/import-data.sh
+elastic: install-elastic import-data-elastic
+
+deploy-kestrel: export KESTREL_STIXSHIFTER_CONFIG=${HOME}/fedsearchtest/kestrel-stixshifter-config.yaml
+deploy-kestrel: check-venv
+	./upper-layer-integration/kestrel/setup/deploy-kestrel.sh
+
+checkout-kestrel-analytics:
+	./upper-layer-integration/kestrel-analytics/setup/checkout-kestrel-analytics.sh
+install-kestrel-analytics: checkout-kestrel-analytics
+	./upper-layer-integration/kestrel-analytics/setup/install-kestrel-analytics.sh
+
+setup-test-env-kestrel-elastic: check-venv install-kestrel elastic deploy-kestrel install-kestrel-analytics
+
+setup-test-env-kestrel-stix-shifter-elastic: check-venv install-kestrel-stix-shifter elastic deploy-kestrel install-kestrel-analytics
+
+test-kestrel-elastic: check-venv
+	./upper-layer-integration/kestrel/test/run-tests.sh
+
 clean-elastic:
-	./scripts/clean-elastic.sh
+	./federated-search-core/setup/elastic-ecs/clean-elastic.sh
 clean-data:
-	rm -rf ${HOME}/huntingtest/data
+	rm -rf ${HOME}/fedsearchtest/data
 clean-analytics:
-	./scripts/clean-analytics.sh
+	./upper-layer-integration/kestrel-analytics/setup/clean-analytics.sh
 clean-all: clean-elastic clean-data clean-analytics
-	rm -rf ${HOME}/huntingtest
-bdd-tests: check-venv
-	./scripts/run-bdd-tests-local.sh
+	rm -rf ${HOME}/fedsearchtest

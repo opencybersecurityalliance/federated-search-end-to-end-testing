@@ -1,4 +1,4 @@
-name: Kestrel Integration Testing
+name: Kestrel End-to-End Testing
 on:
   workflow_dispatch:
     inputs:
@@ -21,10 +21,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  kestrel-integration-testing:
+  kestrel-end-to-end-testing:
     runs-on: ubuntu-20.04
     env:
         kestrel_analytics_branch: release
+        venv_activate:
     steps:
       - name: Worflow Information
         run: |
@@ -32,9 +33,14 @@ jobs:
           echo "Running on a ${{ runner.os }} server hosted by GitHub"
           echo "Running in ${{ github.repository }} repository, ${{ github.ref }} branch."
           echo "HOME = ${HOME}"
-          mkdir -p ${HOME}/huntingtest
+          mkdir -p ${HOME}/fedsearchtest
       - name: Code Checkout
         uses: actions/checkout@v3
+      - name: Create Virtual Environment
+        run: |
+          ./federated-search-core/setup/create-venv.sh
+          source "$HOME/fedsearchtest/fedsearchtest/bin/activate"
+          echo "venv_activate=$VIRTUAL_ENV/bin/activate" >> $GITHUB_ENV
       - name: Kestrel Code Checkout
         uses: actions/checkout@v3
         with:
@@ -47,35 +53,30 @@ jobs:
           repository: opencybersecurityalliance/kestrel-analytics
           ref: ${{ env.kestrel_analytics_branch }}
           path: './kestrel-analytics'
-      - name: Create Virtual Environment
-        run: |
-          ./scripts/create-venv.sh
-          . huntingtest/bin/activate
-          echo "venv_activate=$VIRTUAL_ENV/bin/activate" >> $GITHUB_ENV
       - name: Install kestrel from Source Code
         run: |
           source ${{ env.venv_activate }}
-          ./scripts/install-kestrel.sh
+          ./upper-layer-integration/kestrel/setup/install-kestrel.sh
       - name: Elasticsearch instance setup
         run: |
           source ${{ env.venv_activate }}
-          ./scripts/install-elastic.sh
+          ./federated-search-core/setup/elastic-ecs/install-elastic.sh
       - name: Import test data in elastic instance
-        run: ./scripts/import-data.sh
-      - name: Check deployment of the test environment
+        run: ./federated-search-core/setup/elastic-ecs/import-data.sh
+      - name: Finalize and check Kestrel and Elasticsearch deployment in the test environment
         run: |
           source ${{ env.venv_activate }}
-          ./scripts/run_kestrel.sh
-      - name: Run Integration Tests
+          export KESTREL_STIXSHIFTER_CONFIG=${HOME}/fedsearchtest/kestrel-stixshifter-config.yaml
+          ./upper-layer-integration/kestrel/setup/deploy-kestrel.sh
+      - name: Install Kestrel Analytics
+        run: ./upper-layer-integration/kestrel-analytics/setup/install-kestrel-analytics.sh
+      - name: Run End-to-End Tests
         run: |
           source ${{ env.venv_activate }}
-          ./scripts/prep-bdd-tests.sh ${PWD}
-          export KESTREL_STIXSHIFTER_CONFIG=${HOME}/huntingtest/kestrel-stixshifter-config.yaml
-          behave --logging-level CRITICAL
+          ./upper-layer-integration/kestrel/test/run-tests.sh
       - name: Cleanup
         run: |
-          ./scripts/clean-analytics.sh
-          ./scripts/clean-elastic.sh
+          ./federated-search-core/setup/elastic-ecs/clean-elastic.sh
           docker network rm elastic
           rm -rf data
       - name: Job Status
