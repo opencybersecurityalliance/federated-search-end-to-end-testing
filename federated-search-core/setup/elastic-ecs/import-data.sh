@@ -1,7 +1,7 @@
 #!/bin/bash
 
-ops='host:,port:,gh-org:,gh-repo:,datadir:'
-USAGE="\nUsage: $0 [--host hostname] [--port port-number] [--gh-org github-organization] [--gh-repo github repository] [--datadir data-directory] \n"
+ops='host:,port:,gh-org:,gh-repo:,datadir:,data-indexes:'
+USAGE="\nUsage: $0 [--host hostname] [--port port-number] [--gh-org github-organization] [--gh-repo github repository] [--datadir data-directory] [--data-indexes data-indexes-separated-by-spaces]\n"
 OPTIONS=$(getopt --options '' --longoptions ${ops} --name "$0" -- "$@")
 [[ "$?" != 0 ]]  && exit 3
 eval set -- "${OPTIONS}"
@@ -11,6 +11,7 @@ HOST_PORT=9234
 GH_ORG=opencybersecurityalliance
 GH_REPO=data-bucket-kestrel
 DATA_DIR="${HOME}"/fedsearchtest/data
+DATA_INDEXES="linux-91-sysflow-bh22-20220727 win-111-winlogbeat-bh22-20220727 win-112-winlogbeat-bh22-20220727"
 
 while true
 do
@@ -35,6 +36,10 @@ do
         DATA_DIR="$2"
         shift 2
         ;;
+    --data-indexes)
+        DATA_INDEXES="$2"
+        shift 2
+        ;;
     --)
         shift
         break
@@ -50,7 +55,7 @@ done
 
 ES_PWD=$(cat "${HOME}"/fedsearchtest/.es_pwd)
 mkdir -p "${DATA_DIR}"
-dataindexes=( "linux-91-sysflow-bh22-20220727" "win-111-winlogbeat-bh22-20220727" "win-112-winlogbeat-bh22-20220727" )
+dataindexes=(${DATA_INDEXES// / })
 for dataindex in "${dataindexes[@]}" 
 do
     echo "Running python federated-search-core/setup/elastic-ecs/import_data.py ${dataindex} --directory ${DATA_DIR} --organization ${GH_ORG} --repository ${GH_REPO}"
