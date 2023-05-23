@@ -48,6 +48,7 @@ logging.info(f'Running with the following args: '
              f'target_dir = {target_dir}, '
              f'gh_organization = {gh_organization}, '
              f'gh_repository = {gh_repository}')
+file_compression_extension = 'gz'
 url = '/'.join([
     'https://api.github.com',
     'repos',
@@ -55,14 +56,21 @@ url = '/'.join([
     gh_repository,
     'contents',
     'elasticsearch',
-    f'{args.index}.tar.gz'
+    f'{args.index}.tar.{file_compression_extension}'
     ])
 
 response = requests.get(url, stream=True)
 if response.status_code != 200:
-    logging.error(f'{response.status_code} - failed to retrieve metadata fpr'
-                  f'{args.index}.tar.gz file: {response.text}')
-    sys.exit(-1)
+    logging.warn(f'{response.status_code} - no metadata for'
+                 f'{args.index}.tar.gz file: {response.text}')
+    logging.info(f'Trying to retrieve xz file instead')
+    file_compression_extension = 'xz'
+    url_xz = url.replace('tar.gz', 'tar.xz')
+    response = requests.get(url_xz, stream=True)
+    if response.status_code != 200:
+        logging.error(f'{response.status_code} - no metadata for'
+                 f'{args.index}.tar.xz file: {response.text}')
+        sys.exit(-1)
 file_info = response.json()
 download_url = file_info.get('download_url')
 if download_url is None:
@@ -70,14 +78,18 @@ if download_url is None:
                   f'{json.dumps(file_info, indent=2)}')
     sys.exit(-1)
 
-target_path = os.path.join(target_dir, f'{args.index}.tar.gz')
+target_path = os.path.join(
+    target_dir, f'{args.index}.tar.{file_compression_extension}')
 response = requests.get(download_url, stream=True)
 if response.status_code != 200:
     logging.error(f'{response.status_code} - failed to retrieve '
                   f'{args.index}.tar.gz file: {response.text}')
     sys.exit(-1)
 logging.info(f'Got archive for index {args.index}')
-index_archive = tarfile.open(fileobj=response.raw, mode="r|gz")
+index_archive = tarfile.open(
+    fileobj=response.raw, 
+    mode=f"r|{file_compression_extension}"
+)
 index_archive.extractall(path=target_dir)
 index_archive.close()
 mapping_file_name = os.path.join(target_dir, f'{args.index}.mapping.json')
