@@ -41,3 +41,17 @@ profiles:
             auth:
                 username: elastic
                 password: <ES_PWD>
+    win-500k:
+        connector: elastic_ecs
+        connection:
+            host: localhost
+            port: 9234
+            selfSignedCert: false
+            indices: win-52-elasticagent-500k-benign-20230523
+            options:
+              result_limit: 500000
+              retrieval_batch_size: 10000
+        config:
+            auth:
+                username: elastic
+                password: <ES_PWD>
