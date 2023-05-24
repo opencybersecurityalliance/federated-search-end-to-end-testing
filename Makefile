@@ -17,6 +17,8 @@ install-elastic:
 	./federated-search-core/setup/elastic-ecs/install-elastic.sh
 import-data-elastic:
 	./federated-search-core/setup/elastic-ecs/import-data.sh
+import-data-elastic-scalability:
+	./federated-search-core/setup/elastic-ecs/import-data.sh --data-indexes "win-52-elasticagent-500k-benign-20230523"
 elastic: install-elastic import-data-elastic
 
 deploy-kestrel: export KESTREL_STIXSHIFTER_CONFIG=${HOME}/fedsearchtest/kestrel-stixshifter-config.yaml
@@ -34,6 +36,8 @@ setup-test-env-kestrel-stix-shifter-elastic: check-venv install-kestrel-stix-shi
 
 test-kestrel-elastic: check-venv
 	./upper-layer-integration/kestrel/test/run-tests.sh
+test-kestrel-elastic-scalability: check-venv
+	./upper-layer-integration/kestrel/test/run-scalability-tests.sh
 
 clean-elastic:
 	./federated-search-core/setup/elastic-ecs/clean-elastic.sh
