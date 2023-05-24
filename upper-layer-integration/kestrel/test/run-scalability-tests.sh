@@ -1,5 +1,4 @@
 #!/bin/bash
-pip install behave
 if [ ! -f "${HOME}"/fedsearchtest/kestrel-stixshifter-config.yaml ]; then
     ES_PWD=$(cat "${HOME}"/fedsearchtest/.es_pwd)
     cp config/kestrel-stixshifter-config.yml "${HOME}"/fedsearchtest/kestrel-stixshifter-config.yaml

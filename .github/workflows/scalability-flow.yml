@@ -59,7 +59,7 @@ jobs:
           source ${{ env.venv_activate }}
           ./federated-search-core/setup/elastic-ecs/install-elastic.sh
       - name: Import test data in elastic instance
-        run: ./federated-search-core/setup/elastic-ecs/import-data.sh --data-indexes "win-52-elasticagent-500k-benign-20230523"
+        run: ./federated-search-core/setup/elastic-ecs/import-data.sh --data-indexes "win-111-winlogbeat-bh22-20220727 win-52-elasticagent-500k-benign-20230523"
       - name: Finalize and check Kestrel and Elasticsearch deployment in the test environment
         run: |
           source ${{ env.venv_activate }}
