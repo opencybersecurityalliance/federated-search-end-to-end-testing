@@ -6,5 +6,4 @@ if [ ! -f "${HOME}"/fedsearchtest/kestrel-stixshifter-config.yaml ]; then
 fi
 export KESTREL_STIXSHIFTER_CONFIG="${HOME}"/fedsearchtest/kestrel-stixshifter-config.yaml
 
-start_time=$(date +%s)
-kestrel upper-layer-integration/kestrel/test/huntflows/kestrel-scalability.hf && echo "run time is $($(date +%s) - $start_time) s"
+time kestrel upper-layer-integration/kestrel/test/huntflows/kestrel-scalability.hf
