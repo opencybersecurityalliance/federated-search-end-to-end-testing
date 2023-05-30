@@ -1,0 +1,3 @@
+e = GET ipv4-addr FROM stixshifter://win-500k
+    WHERE value = '192.168.56.52'
+    START 2023-05-23T11:00:00Z STOP 2023-05-23T11:30:00Z
