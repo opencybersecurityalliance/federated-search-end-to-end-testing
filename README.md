@@ -46,7 +46,7 @@ This step will:
     * Import three elastic indexes in the newly created elasticsearch instance
   * Finalize the deployment (`deploy-kestrel`):
     * Configure the STIX-Shifter profiles used by Kestrel
-    * Run [a test huntbook](upper-layer-integration/kestrel/test/huntflows/kestrel-test.hf) to test the deployment end-to-end.
+    * Run [a test huntbook](application-test/kestrel/test/huntflows/kestrel-test.hf) to test the deployment end-to-end.
 
 For local runs, this step can be controlled using the following environment variables.  
   * `STIX_SHIFTER_BRANCH` specifies which branch of the STIX-Shifter code to check out (default value: `develop`)
@@ -68,7 +68,7 @@ This step will:
   * Install [behave](https://github.com/behave/behave) package
   * Run end-to-end tests using [behave](https://github.com/behave/behave)
 
-The tests are using three Kestrel hunt books: [start hunt from TTPs](upper-layer-integration/kestrel/test/huntflows/kestrel-start-hunt-from-ttps.hf), [cross-host campaign discovery](upper-layer-integration/kestrel/test/huntflows/kestrel-cross-host-campaign-discovery.hf), and [apply analytics in a hunt](upper-layer-integration/kestrel/test/huntflows/kestrel-analytics.hf) that have been derived from the [Kestrel notebooks presented at Black Hat 22](https://github.com/opencybersecurityalliance/kestrel-huntbook/tree/main/blackhat22)
+The tests are using three Kestrel hunt books: [start hunt from TTPs](application-test/kestrel/test/huntflows/kestrel-start-hunt-from-ttps.hf), [cross-host campaign discovery](application-test/kestrel/test/huntflows/kestrel-cross-host-campaign-discovery.hf), and [apply analytics in a hunt](application-test/kestrel/test/huntflows/kestrel-analytics.hf) that have been derived from the [Kestrel notebooks presented at Black Hat 22](https://github.com/opencybersecurityalliance/kestrel-huntbook/tree/main/blackhat22)
 
 ### Cleaning Up
 

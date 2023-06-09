@@ -6,4 +6,4 @@ if [ ! -f "${HOME}"/fedsearchtest/kestrel-stixshifter-config.yaml ]; then
 fi
 export KESTREL_STIXSHIFTER_CONFIG="${HOME}"/fedsearchtest/kestrel-stixshifter-config.yaml
 
-time kestrel upper-layer-integration/kestrel/test/huntflows/kestrel-scalability.hf
+time kestrel application-test/kestrel/test/huntflows/kestrel-scalability.hf

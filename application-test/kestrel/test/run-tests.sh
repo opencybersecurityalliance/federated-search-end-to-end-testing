@@ -7,6 +7,6 @@ if [ ! -f "${HOME}"/fedsearchtest/kestrel-stixshifter-config.yaml ]; then
     sed -i'' -e "s/<ES_PWD>/${ES_PWD}/" "${HOME}"/fedsearchtest/kestrel-stixshifter-config.yaml
 fi
 export KESTREL_STIXSHIFTER_CONFIG="${HOME}"/fedsearchtest/kestrel-stixshifter-config.yaml
-cd upper-layer-integration/kestrel/test || exit
+cd application-test/kestrel/test || exit
 behave --logging-level CRITICAL
 cd "${CRT_DIR}" || exit
