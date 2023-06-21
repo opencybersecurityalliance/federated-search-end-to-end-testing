@@ -3,9 +3,9 @@ venv:
 check-venv:
 	./federated-search-core/setup/check-venv.sh
 checkout-stix-shifter:
-	./federated-search-core/setup/stix-shifter/checkout-stix-shifter.sh
+	./federated-search-core/stix-shifter/setup/checkout-stix-shifter.sh
 install-stix-shifter: check-venv checkout-stix-shifter
-	./federated-search-core/setup/stix-shifter/install-stix-shifter.sh
+	./federated-search-core/stix-shifter/setup/install-stix-shifter.sh
 checkout-kestrel:
 	./application-test/kestrel/setup/checkout-kestrel.sh
 install-kestrel: check-venv checkout-kestrel
