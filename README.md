@@ -27,8 +27,12 @@ Currently, the local workflow supports setting up a testing environment for one 
 Triggered with:
 ```
 make setup-test-env-kestrel-stix-shifter-elastic
+```
+to build both STIX-Shifter and Kestrel from source code, or with:
+```
 make setup-test-env-kestrel-elastic
 ```
+to build only Kestrel from source code, and install STIX-Shifter as a python package.
 
 This step will:
   * Checkout the code for:
@@ -58,6 +62,12 @@ For local runs, this step can be controlled using the following environment vari
   * `KESTREL_ANALYTICS_BRANCH` specifies which branch of the Kestrel analytics code to download (default value: `release`)
   * `KESTREL_ANALYTICS_REPO` specifies the name of the Kestrel Analytics repository (default value: `kestrel-analytics`)
   * `KESTREL_ANALYTICS_ORG` specifies the organization from which Kestrel Analytics code is checked out ( default value: `opencybersecurityalliance`)
+
+**Note** for MacOS users.  It is possible that, on MacOS, the Kestrel analytics Docker image fails to build with an error like this:
+```
+ => ERROR [internal] load metadata for docker.io/library/python:3.9
+```
+A possible fix for this problem is to edit the `${HOME}/.docker/config.json` file and replace any occurrences of `credsStore` with `credStore`. 
 
 ### Running the Tests
 Triggered with:
