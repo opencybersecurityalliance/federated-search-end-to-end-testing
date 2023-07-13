@@ -55,3 +55,4 @@ if analysis_type == "PassFail":
 else:
     logging.warn(f"Analysis of type {analysis_type} not supported yet")
     sys.exit(-1)
+logging.info("Testing PASSED")
