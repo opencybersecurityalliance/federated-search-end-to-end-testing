@@ -8,5 +8,6 @@ if [ ! -f "${HOME}"/fedsearchtest/kestrel-stixshifter-config.yaml ]; then
 fi
 export KESTREL_STIXSHIFTER_CONFIG="${HOME}"/fedsearchtest/kestrel-stixshifter-config.yaml
 cd application-test/kestrel/test || exit
-behave --logging-level CRITICAL
+behave --logging-level CRITICAL --format json --outfile /tmp/kestrel-behave.json --format pretty
 cd "${CRT_DIR}" || exit
+python3 federated-search-core/test/analyze-results.py /tmp/kestrel-behave.json

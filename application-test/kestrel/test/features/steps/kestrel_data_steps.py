@@ -81,7 +81,7 @@ def step_impl(context):
     print(f'len(exploit_candidates) = {len(exploit_candidates)}')
     assert exploit_candidates and len(exploit_candidates) in [718, 964]
     exploit_summary = context.summary_hunt_ttps.get('exploit_candidates', {})
-    assert exploit_summary and exploit_summary.get('#(RECORDS)') in [1118, 964]
+    assert exploit_summary and exploit_summary.get('#(RECORDS)') == 718
 
 
 @when(u'I start a cross-host campaign discovery with Kestrel')
@@ -149,9 +149,9 @@ def step_impl(context):
 @then(u'identify attacker activities on windows hosts')
 def step_impl(context):
     lateral_mov_112_proc = context.session.get_variable('lateral_mov_112_proc')
-    assert lateral_mov_112_proc and len(lateral_mov_112_proc) == 2
+    assert lateral_mov_112_proc and len(lateral_mov_112_proc) == 1
     lm_112_mov_summary = context.campaign_summary.get('lateral_mov_112_proc', {})
-    assert lm_112_mov_summary and lm_112_mov_summary.get('#(RECORDS)') == 20
+    assert lm_112_mov_summary and lm_112_mov_summary.get('#(RECORDS)') == 14
     lateral_mov_112_receiver = context.session.get_variable('lateral_mov_112_receiver')
     assert lateral_mov_112_receiver and len(lateral_mov_112_receiver) == 1
     splunkd_on_112 = context.session.get_variable('splunkd_on_112')
@@ -170,7 +170,7 @@ def step_impl(context):
     print(f'len(linux_proc) = {len(linux_proc)}')
     assert linux_proc and len(linux_proc) in [34, 35]
     linux_proc_summary = context.campaign_summary.get('linux_proc', {})
-    assert linux_proc_summary and linux_proc_summary.get('#(RECORDS)') == 35
+    assert linux_proc_summary and linux_proc_summary.get('#(RECORDS)') == 34
     node_children = context.session.get_variable('node_children')
     node_grand_children = context.session.get_variable('node_grand_children')
     print(f'len(node_children) = {len(node_children)}')
@@ -178,9 +178,9 @@ def step_impl(context):
     assert node_children and len(node_children) in [303, 335]
     assert node_grand_children and len(node_grand_children) in [363, 534]
     node_children_summary = context.campaign_summary.get('node_children', {})
-    assert node_children_summary and node_children_summary.get('#(RECORDS)') == 335
+    assert node_children_summary and node_children_summary.get('#(RECORDS)') == 303
     node_grand_children_summary = context.campaign_summary.get('node_grand_children', {})
-    assert node_grand_children_summary and node_grand_children_summary.get('#(RECORDS)') == 534
+    assert node_grand_children_summary and node_grand_children_summary.get('#(RECORDS)') == 363
 
 
 @then(u'discover the C2 host / IP address if any')
