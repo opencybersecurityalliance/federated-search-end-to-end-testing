@@ -34,6 +34,9 @@ jobs:
           echo "Running in ${{ github.repository }} repository, ${{ github.ref }} branch."
           echo "HOME = ${HOME}"
           mkdir -p ${HOME}/fedsearchtest
+      - name: Setup latest pip environment
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
       - name: Code Checkout
         uses: actions/checkout@v3
       - name: Create Virtual Environment
