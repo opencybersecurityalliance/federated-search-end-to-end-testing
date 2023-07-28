@@ -34,9 +34,6 @@ jobs:
           echo "Running in ${{ github.repository }} repository, ${{ github.ref }} branch."
           echo "HOME = ${HOME}"
           mkdir -p ${HOME}/fedsearchtest
-      - name: Setup latest pip environment
-        run: |
-          python -m pip install --upgrade pip setuptools wheel
       - name: Code Checkout
         uses: actions/checkout@v3
       - name: Create Virtual Environment
@@ -44,6 +41,9 @@ jobs:
           ./federated-search-core/setup/create-venv.sh
           source "$HOME/fedsearchtest/fedsearchtest/bin/activate"
           echo "venv_activate=$VIRTUAL_ENV/bin/activate" >> $GITHUB_ENV
+      - name: Setup latest pip environment
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
       - name: Kestrel Code Checkout
         uses: actions/checkout@v3
         with:
