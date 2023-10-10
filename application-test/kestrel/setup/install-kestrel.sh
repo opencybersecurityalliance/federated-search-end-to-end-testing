@@ -13,5 +13,5 @@ if [ -n "$STIX_SHIFTER_TEST_VERSION" ]; then
     sed -i "s/.*stix-shifter=.*/    stix-shifter==$STIX_SHIFTER_TEST_VERSION/" setup.cfg
     sed -i "s/.*stix-shifter>.*/    stix-shifter==$STIX_SHIFTER_TEST_VERSION/" setup.cfg
 fi
-pip install .
+make install
 cd "${CRT_DIR}" || exit
