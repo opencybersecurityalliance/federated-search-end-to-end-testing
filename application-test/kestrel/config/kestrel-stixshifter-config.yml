@@ -4,9 +4,9 @@ profiles:
         connection:
             host: localhost
             port: 9234
-            selfSignedCert: false
             indices: win-111-winlogbeat-bh22-20220727
             options:
+                verify_cert: false
                 dialects:
                   - beats
         config:
@@ -18,9 +18,9 @@ profiles:
         connection:
             host: localhost
             port: 9234
-            selfSignedCert: false
             indices: win-112-winlogbeat-bh22-20220727
             options:
+                verify_cert: false
                 dialects:
                   - beats
         config:
@@ -32,9 +32,9 @@ profiles:
         connection:
             host: localhost
             port: 9234
-            selfSignedCert: false
             indices: linux-91-sysflow-bh22-20220727
             options:
+                verify_cert: false
                 dialects:
                   - beats
         config:
@@ -46,11 +46,11 @@ profiles:
         connection:
             host: localhost
             port: 9234
-            selfSignedCert: false
             indices: win-52-elasticagent-500k-benign-20230523
             options:
-              result_limit: 500000
-              retrieval_batch_size: 10000
+                verify_cert: false
+                result_limit: 500000
+                retrieval_batch_size: 10000
         config:
             auth:
                 username: elastic
